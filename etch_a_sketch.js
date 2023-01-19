@@ -13,23 +13,20 @@ function _removeGridSquaresPresent(grid) {
 }
 
 
-function _initGrid(grid, gridSize) {
-    const gridSquares = [];
+function changeGridSquareColourOnHover(e) {
+    e.target.classList.add('grid-square-onHover');
+}
 
+
+function _initGrid(grid, gridSize) {
     for (let i = 0; i < (gridSize ** 2); i++) {
         const gridSquare = document.createElement('div');
         gridSquare.classList.add('grid-square');
 
-        gridSquares.push(gridSquare);
+        gridSquare.addEventListener('mouseenter', changeGridSquareColourOnHover)
+
         grid.appendChild(gridSquare);
     }
-
-    return gridSquares;
-}
-
-
-function _addHover(gridSquares) {
-    gridSquares.forEach(gridSquare => gridSquare.addEventListener('mouseenter', changeGridSquareColourOnHover));
 }
 
 
@@ -40,27 +37,26 @@ function createGrid(gridSize = INITIAL_GRID_SIZE) {
 
     _removeGridSquaresPresent(grid);
 
-    gridSquares = _initGrid(grid, gridSize);
-
-    _addHover(gridSquares);
+    _initGrid(grid, gridSize);
 
 }
 
+function redrawGridFactory() {
+    let currentGridSizeChoice = INITIAL_GRID_SIZE;
 
-function changeGridSquareColourOnHover(e) {
-    e.target.classList.add('grid-square-onHover');
-}
-
-
-function redrawGrid() {
-    let gridSizeChoice = Number(prompt('Choose grid size (max grid size = 100):', 16));
-    if (Number.isNaN(gridSizeChoice) || gridSizeChoice <= 0) {
-        return;
+    function redrawGrid() {
+        gridSizeChoice = Number(prompt('Choose grid size (max grid size = 100):', currentGridSizeChoice));
+        if (Number.isNaN(gridSizeChoice) || gridSizeChoice <= 0) {
+            return;
+        }
+        if (gridSizeChoice > 100) {
+            gridSizeChoice = 100;
+        }
+        currentGridSizeChoice = gridSizeChoice;
+        createGrid(gridSizeChoice);
     }
-    if (gridSizeChoice > 100) {
-        gridSizeChoice = 100;
-    }
-    createGrid(gridSizeChoice);
+
+    return redrawGrid;
 }
 
 
@@ -68,7 +64,9 @@ function main() {
     createGrid();
 
     const gridSizeChanger = document.querySelector('.gridSizeChanger');
-    gridSizeChanger.addEventListener('click', redrawGrid);
+    redrawGridFn = redrawGridFactory();
+    gridSizeChanger.addEventListener('click', redrawGridFn);
 }
+
 
 main();
