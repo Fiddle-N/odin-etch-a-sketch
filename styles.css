@@ -2,7 +2,14 @@
     --grid-size: 0;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+}
+
 .grid {
+    flex: 1;
+    max-width: 960px;
     display: grid;
     grid-template-rows: repeat(var(--grid-size), 1fr);
     grid-template-columns: repeat(var(--grid-size), 1fr);
