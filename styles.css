@@ -1,0 +1,17 @@
+:root {
+    --grid-size: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-rows: repeat(var(--grid-size), 1fr);
+    grid-template-columns: repeat(var(--grid-size), 1fr);
+    aspect-ratio: 1;
+    border: solid black 1px;
+}
+
+.grid-square {
+    background-color: white;
+    border: solid black 1px;
+}
+
