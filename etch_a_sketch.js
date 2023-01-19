@@ -11,8 +11,14 @@ function createGrid() {
     }
 }
 
+function changeGridSquareColourOnHover(e) {
+    e.target.classList.add('grid-square-onHover');
+}
+
 function main() {
     createGrid();
+    const gridSquares = document.querySelectorAll('.grid-square');
+    gridSquares.forEach(gridSquare => gridSquare.addEventListener('mouseenter', changeGridSquareColourOnHover));
 }
 
 main();
