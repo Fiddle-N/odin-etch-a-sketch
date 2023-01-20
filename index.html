@@ -10,7 +10,22 @@
 </head>
 <body>
     <div class="page">
-        <button type="button" class="gridSizeChanger">Change/Redraw Grid</button>
+        <button type="button" class="gridRedrawer">Change/Redraw Grid</button>
+        <fieldset>
+            <legend>Select Mode (will redraw grid):</legend>
+            <div>
+                <input type="radio" class="gridMode-input" id="gridMode-solid" name="mode" value="solid" checked>
+                <label for="gridMode-solid">Solid Black</label> 
+            </div>
+            <div>
+                <input type="radio" class="gridMode-input" id="gridMode-random" name="mode" value="random">
+                <label for="gridMode-random">Random Colour</label> 
+            </div>
+            <div>
+                <input type="radio" class="gridMode-input" id="gridMode-gradient" name="mode" value="gradient">
+                <label for="gridMode-gradient">Gradient Black (doesn't work yet)</label> 
+            </div>
+        </fieldset>
         <div class="grid"></div>
     </div>
 </body>
