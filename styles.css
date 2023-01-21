@@ -32,5 +32,6 @@ body {
 
 .grid-square {
     background-color: white;
+    cursor: crosshair;
     transition: background-color 0.15s ease;
 }
