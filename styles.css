@@ -32,9 +32,5 @@ body {
 
 .grid-square {
     background-color: white;
-    border: solid black 1px;
-}
-
-.grid-square-onHover {
-    background-color: black;
+    transition: background-color 0.15s ease;
 }

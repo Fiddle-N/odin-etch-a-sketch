@@ -3,6 +3,7 @@ INITIAL_GRID_SIZE = 16;
 MODE_SOLID = 'solid';
 MODE_RANDOM = 'random';
 MODE_GRADIENT = 'gradient';
+MODE_ERASER = 'eraser';
 
 
 function getRandomInt(min, max) {
@@ -19,13 +20,21 @@ function getRandomRGB() {
 }
 
 
-function hoverModeBlack(e) {
-    e.target.classList.add('grid-square-onHover');
+function onClickAndDrag(e, fn) {
+    if (e.buttons === 1) {
+        e.preventDefault();
+        fn();
+    }
+}
+
+
+function hoverModeSolid(e) {
+    onClickAndDrag(e, () => e.target.style.backgroundColor = 'black');
 }
 
 
 function hoverModeRandom(e) {
-    e.target.style.backgroundColor = getRandomRGB();
+    onClickAndDrag(e, () => e.target.style.backgroundColor = getRandomRGB());
 }
 
 
@@ -37,36 +46,15 @@ function hoverModeGradientFactory() {
         if (lightness < 0) {
             lightness = 0;
         }
-        e.target.style.backgroundColor = `hsl(0, 0%, ${lightness}%)`;
+        onClickAndDrag(e, () => e.target.style.backgroundColor = `hsl(0, 0%, ${lightness}%)`);
     }
-    
+
     return hoverModeGradient;
 }
 
 
-function _initGrid(grid, gridSize, mode) {
-    let gridSquareEventListener;
-
-    for (let i = 0; i < (gridSize ** 2); i++) {
-        switch (mode) {
-            case (MODE_SOLID):
-                gridSquareEventListener = hoverModeBlack;
-                break;
-            case (MODE_RANDOM):
-                gridSquareEventListener = hoverModeRandom;
-                break;
-            case (MODE_GRADIENT):
-                gridSquareEventListener = hoverModeGradientFactory();
-                break;
-        }
-
-        const gridSquare = document.createElement('div');
-        gridSquare.classList.add('grid-square');
-
-        gridSquare.addEventListener('mouseenter', gridSquareEventListener);
-
-        grid.appendChild(gridSquare);
-    }
+function hoverModeEraser(e) {
+    onClickAndDrag(e, () => e.target.style.backgroundColor = 'white');
 }
 
 
@@ -82,6 +70,53 @@ function _removeGridSquaresPresent(grid) {
 }
 
 
+function _initGrid(grid, gridSize) {
+    for (let i = 0; i < (gridSize ** 2); i++) {
+        const gridSquare = document.createElement('div');
+        gridSquare.classList.add('grid-square');
+        grid.appendChild(gridSquare);
+    }
+}
+
+
+function addEventListenerToGrid(mode) {
+
+    function getEventListener() {
+        let gridSquareEventListener;
+
+        switch (mode) {
+            case (MODE_SOLID):
+                gridSquareEventListener = hoverModeSolid;
+                break;
+            case (MODE_RANDOM):
+                gridSquareEventListener = hoverModeRandom;
+                break;
+            case (MODE_GRADIENT):
+                gridSquareEventListener = hoverModeGradientFactory();
+                break;
+            case (MODE_ERASER):
+                gridSquareEventListener = hoverModeEraser;
+                break;
+
+        }
+
+        return gridSquareEventListener;
+    }
+
+    const gridSquares = document.querySelectorAll('.grid-square');
+
+    function addEventListeners(gridSquare) {
+        newGridSquare = gridSquare.cloneNode(true);
+        gridSquare.replaceWith(newGridSquare);
+        eventListener = getEventListener();
+        newGridSquare.addEventListener('mousedown', eventListener);
+        newGridSquare.addEventListener('mouseenter', eventListener);
+    }
+
+    gridSquares.forEach(addEventListeners);
+}
+
+
 function createGrid(mode, gridSize = INITIAL_GRID_SIZE) {
     _setGridSize(gridSize);
 
@@ -89,7 +124,9 @@ function createGrid(mode, gridSize = INITIAL_GRID_SIZE) {
 
     _removeGridSquaresPresent(grid);
 
-    _initGrid(grid, gridSize, mode);
+    _initGrid(grid, gridSize);
+
+    addEventListenerToGrid(mode);
 
 }
 
@@ -112,7 +149,7 @@ function redrawGridFactory(mode) {
 
     function changeMode(e) {
         currentMode = e.target.value;
-        createGrid(currentMode, currentGridSizeChoice);
+        addEventListenerToGrid(currentMode);
     }
 
     return [redrawGrid, changeMode];

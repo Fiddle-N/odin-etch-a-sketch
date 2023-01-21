@@ -12,18 +12,22 @@
     <div class="page">
         <button type="button" class="gridRedrawer">Change/Redraw Grid</button>
         <fieldset>
-            <legend>Grid Mode (will redraw grid)</legend>
-            <div title="On hover, each grid square turns black">
+            <legend>Grid Mode</legend>
+            <div title="On click and drag, each grid square turns black">
                 <input type="radio" class="gridMode-input" id="gridMode-solid" name="mode" value="solid" checked>
                 <label for="gridMode-solid">Solid Black</label> 
             </div>
-            <div title="On hover, each grid square turns a random colour">
+            <div title="On click and drag, each grid square turns a random colour">
                 <input type="radio" class="gridMode-input" id="gridMode-random" name="mode" value="random">
                 <label for="gridMode-random">Random Colour</label> 
             </div>
-            <div title="On hover, each grid square turns 10% darker">
+            <div title="On click and drag, each grid square turns 10% darker">
                 <input type="radio" class="gridMode-input" id="gridMode-gradient" name="mode" value="gradient">
                 <label for="gridMode-gradient">Gradient Grey</label> 
+            </div>
+            <div title="On click and drag, each grid square turns white">
+                <input type="radio" class="gridMode-input" id="gridMode-eraser" name="mode" value="eraser">
+                <label for="gridMode-eraser">Eraser White</label> 
             </div>
         </fieldset>
         <div class="grid"></div>
