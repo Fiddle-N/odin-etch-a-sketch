@@ -1,7 +1,8 @@
 INITIAL_GRID_SIZE = 16;
 
-MODE_BLACK = 'black';
+MODE_SOLID = 'solid';
 MODE_RANDOM = 'random';
+MODE_GRADIENT = 'gradient';
 
 
 function getRandomInt(min, max) {
@@ -18,18 +19,6 @@ function getRandomRGB() {
 }
 
 
-function _setGridSize(gridSize) {
-    const root = document.documentElement;
-    root.style.setProperty('--grid-size', gridSize);
-}
-
-
-function _removeGridSquaresPresent(grid) {
-    const gridSquares = document.querySelectorAll('.grid-square');
-    gridSquares.forEach(gridSquare => grid.removeChild(gridSquare));
-}
-
-
 function hoverModeBlack(e) {
     e.target.classList.add('grid-square-onHover');
 }
@@ -40,27 +29,56 @@ function hoverModeRandom(e) {
 }
 
 
+function hoverModeGradientFactory() {
+    let lightness = 100;
+
+    function hoverModeGradient(e) {
+        lightness -= 10;
+        if (lightness < 0) {
+            lightness = 0;
+        }
+        e.target.style.backgroundColor = `hsl(0, 0%, ${lightness}%)`;
+    }
+    
+    return hoverModeGradient;
+}
+
+
 function _initGrid(grid, gridSize, mode) {
     let gridSquareEventListener;
-    switch (mode) {
-        case (MODE_BLACK):
-            gridSquareEventListener = hoverModeBlack;
-            break;
-        case (MODE_RANDOM):
-            gridSquareEventListener = hoverModeRandom;
-            break;
-        default:
-            gridSquareEventListener = hoverModeBlack;
-    }
 
     for (let i = 0; i < (gridSize ** 2); i++) {
+        switch (mode) {
+            case (MODE_SOLID):
+                gridSquareEventListener = hoverModeBlack;
+                break;
+            case (MODE_RANDOM):
+                gridSquareEventListener = hoverModeRandom;
+                break;
+            case (MODE_GRADIENT):
+                gridSquareEventListener = hoverModeGradientFactory();
+                break;
+        }
+
         const gridSquare = document.createElement('div');
         gridSquare.classList.add('grid-square');
 
-        gridSquare.addEventListener('mouseenter', gridSquareEventListener)
+        gridSquare.addEventListener('mouseenter', gridSquareEventListener);
 
         grid.appendChild(gridSquare);
     }
+}
+
+
+function _setGridSize(gridSize) {
+    const root = document.documentElement;
+    root.style.setProperty('--grid-size', gridSize);
+}
+
+
+function _removeGridSquaresPresent(grid) {
+    const gridSquares = document.querySelectorAll('.grid-square');
+    gridSquares.forEach(gridSquare => grid.removeChild(gridSquare));
 }
 
 
